@@ -9,20 +9,16 @@ uniform mat4 P;
 
 out vec4 fcolor;
 out vec2 fmassRad;
-out vec4 flightDir;
-
-vec4 lightPos = vec4(10.0, 10.0, 10.0, 1.0);
+//out vec4 flightDir;
+//vec4 lightPos = vec4(10.0, 10.0, 10.0, 0.0);
 
 void main()
 {
         fcolor = vColor;
         fmassRad = vMassRad;
-        //flightDir = normalize(lightPos - vPosition);
-        //flightDir = vec4(1.0, 0.0, 1.0, 1.0);
-
-        //vec4 worldPosition = M * vPosition;
-        //flightDir = vec4(normalize((lightPos - vPosition).xyz), 1.0);
-
+        mat4 viewInv = inverse(V);
+        vec4 eyePos = vec4(viewInv[3][0], viewInv[3][1], viewInv[3][2], 0) / viewInv[3].w;
+        //flightDir = normalize(lightPos- M * vPosition);
         gl_Position= P * V * M * vPosition;
-        gl_PointSize =  10 * fmassRad.y;
+        gl_PointSize =  (1000 * fmassRad.y) / length(vPosition-eyePos);
 }
