@@ -67,7 +67,7 @@ void Scene::keyPressEvent(int key, int scancode, int action, int mods)
                 {
                         case GLFW_KEY_G: mDrawGrid = !mDrawGrid; break;
                         case GLFW_KEY_SPACE: mPaused = !mPaused; break;
-                        case GLFW_KEY_S: stepScene(0.01); break;
+                        case GLFW_KEY_S: stepScene(0.05); break;
                         case GLFW_KEY_W: mStars.resetGeometry(); break;
                 }
         }

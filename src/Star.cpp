@@ -18,6 +18,7 @@ StarField::StarField(size_t count)
         mStars.push_back({glm::vec3(15, -10, 5), glm::vec3(0, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.1f, 4.f});
         mStars.push_back({glm::vec3(15, -14, 5), glm::vec3(0, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.2f, 2.f});
         mStars.push_back({glm::vec3(15, -14, -5), glm::vec3(0, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.2f, 2.f});
+        mStars.push_back({glm::vec3(15, 14, -5), glm::vec3(0, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.2f, 2.f});
 
 
         //resetGeometry();
@@ -95,11 +96,11 @@ void StarField::stepGeometry(atlas::utils::Time const& t)
         // Okay, we need to update all of the things
         for (auto sIt = mStars.begin(); sIt != mStars.end(); sIt++)
         {
-                //if (sIt == mStars.begin()) continue;
+                if (sIt == mStars.begin()) continue;
                 auto accelFunc = [=](auto t)
                 {
                         glm::vec3 F;
-                        for (auto other = mStars.begin(); other != mStars.end(); other++)\
+                        for (auto other = mStars.begin(); other != mStars.end(); other++)
                         {
                                 if (other == sIt) continue;
                                 const glm::vec3 disp = other->_pos - sIt->_pos;
@@ -150,12 +151,12 @@ void StarField::resetGeometry()
 
 void StarField::updateGeometry(atlas::utils::Time const&t)
 {
-        physics::ODERK4 solver;
+        physics::ODERK3 solver;
         glm::vec3 pos, vel;
         // Okay, we need to update all of the things
         for (auto sIt = mStars.begin(); sIt != mStars.end(); sIt++)
         {
-                //if (sIt == mStars.begin()) continue;
+                if (sIt == mStars.begin()) continue;
                 auto accelFunc = [=](auto t)
                 {
                         glm::vec3 F;
