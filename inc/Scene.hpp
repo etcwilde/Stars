@@ -47,6 +47,8 @@ class Scene: public atlas::utils::Scene
                 bool mDrawGrid;
                 Grid mGrid;
 
+                float mTimeSpeed;
+
                 StarField mStars;
 };
 

@@ -18,7 +18,6 @@ void main()
         fmassRad = vMassRad;
         mat4 viewInv = inverse(V);
         vec4 eyePos = vec4(viewInv[3][0], viewInv[3][1], viewInv[3][2], 0) / viewInv[3].w;
-        //flightDir = normalize(lightPos- M * vPosition);
         gl_Position= P * V * M * vPosition;
         gl_PointSize =  (1000 * fmassRad.y) / length(vPosition-eyePos);
 }

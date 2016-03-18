@@ -275,19 +275,19 @@ namespace physics
                                         const Vector vk11 = accelFunc(x, initialVel);
                                         const Vector vk12 = accelFunc(x + halfH, initialVel + halfH * vk11);
                                         const Vector vk13 = accelFunc(x + h, initialVel - vk11 * h + Scalar(2) * vk12 * h);
-                                        const Vector pk1 = h6 * (vk11 + Scalar(4) * vk12 + vk13);
+                                        const Vector pk1 = initialVel + h6 * (vk11 + Scalar(4) * vk12 + vk13);
                                         //const Vector vk21 = vk12;
                                         const Vector vk21 = accelFunc(x + halfH, initialVel + halfH * pk1);
                                         const Vector vk22 = accelFunc(x + h, initialVel + halfH * pk1 + halfH  * vk21);
                                         const Vector vk23 = accelFunc(x + halfH + h, initialVel + halfH * pk1 - vk21 * h + Scalar(2) * vk22 *h);
-                                        const Vector pk2 = h6 * (vk21 + Scalar(4) * vk22 + vk23);
+                                        const Vector pk2 = pk1 + h6 * (vk21 + Scalar(4) * vk22 + vk23);
                                         const Vector vk31 = accelFunc(x + h, initialVel - pk1 * h + Scalar(2) * pk2 * h);
                                         const Vector vk32 = accelFunc(x + h + halfH, initialVel - pk1 * h + Scalar(2) * pk2 * h + halfH * vk31);
                                         const Vector vk33 = accelFunc(x + Scalar(2) * h, initialVel - pk1 * h + Scalar(2) * pk2 * h - vk31 + Scalar(2) * vk32 * h);
-                                        const Vector pk3 = h6 * (vk31 + Scalar(4) * vk32 + vk33);
+                                        const Vector pk3 = pk2 + h6 * (vk31 + Scalar(4) * vk32 + vk33);
 
-                                        vel = initialVel + pk1;
-                                        pos =  initialPos + h6 * (pk1 + Scalar(4) * pk2 + pk3); //* Scalar(0.5);
+                                        vel = pk1;
+                                        pos =  initialPos + h6 * (pk1 + Scalar(4) * pk2 + pk3) * Scalar(0.5);
                                 }
 
         };
@@ -312,32 +312,29 @@ namespace physics
                                         const Vector vk12 = accelFunc(x + halfH, initialVel + halfH * vk11);
                                         const Vector vk13 = accelFunc(x + halfH, initialVel + halfH * vk12);
                                         const Vector vk14 = accelFunc(x + h, initialPos + h * vk13);
-                                        const Vector pk1 = h6 * (vk11 + Scalar(2.) * vk12 + Scalar(2.) * vk13 + vk14);
-                                        vel = initialVel + pk1;
-
+                                        const Vector pk1 = initialVel + h6 * (vk11 + Scalar(2.) * vk12 + Scalar(2.) * vk13 + vk14);
+                                        vel = pk1;
                                         const Vector halfPk1 = halfH * vk11;
                                         const Vector vk21 = accelFunc(x + halfH, initialVel + halfPk1);
                                         const Vector vk22 = accelFunc(x + h, initialVel + halfPk1 + halfH * vk21);
                                         const Vector vk23 = accelFunc(x + h, initialVel + halfPk1 + halfH * vk22);
                                         const Vector vk24 = accelFunc(x + halfH + h, initialVel + halfPk1 + halfH * vk23);
-                                        const Vector pk2 = h6 * (vk21 + Scalar(2.) * vk22 + Scalar(2.) * vk23 + vk24);
+                                        const Vector pk2 = pk1 + h6 * (vk21 + Scalar(2.) * vk22 + Scalar(2.) * vk23 + vk24);
 
                                         const Vector halfPk2 = halfH * pk2;
                                         const Vector vk31 = accelFunc(x + halfH, initialVel + halfPk2);
                                         const Vector vk32 = accelFunc(x + h, initialVel + halfPk2 + halfH * vk31);
                                         const Vector vk33 = accelFunc(x + h, initialVel + halfPk2 + halfH * vk32);
                                         const Vector vk34 = accelFunc(x + halfH + h, initialVel + halfPk2 + h * vk33);
-                                        const Vector pk3 = h6 * (vk31 + Scalar(2.)* (vk32 + vk33) + vk34);
+                                        const Vector pk3 = pk2 + h6 * (vk31 + Scalar(2.)* (vk32 + vk33) + vk34);
 
                                         const Vector hPk3 = h * pk3;
                                         const Vector vk41 = accelFunc(x + h, initialVel + hPk3);
                                         const Vector vk42 = accelFunc(x + h + halfH, initialVel + hPk3 + halfH * vk41);
                                         const Vector vk43 = accelFunc(x + h + halfH, initialVel + hPk3 + halfH * vk42);
                                         const Vector vk44 = accelFunc(x + Scalar(2) * h, initialVel + hPk3 + h * vk43);
-                                        const Vector pk4 = h6 * (vk41 + Scalar(2.) * (vk42 + vk43) + vk44);
-
+                                        const Vector pk4 = pk3 + h6 * (vk41 + Scalar(2.) * (vk42 + vk43) + vk44);
                                         pos = initialPos + h6 * (pk1 + Scalar(2)*(pk2 +  pk3) + pk4) * Scalar(0.5);
-
                                 }
 
 

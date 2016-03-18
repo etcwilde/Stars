@@ -9,6 +9,7 @@ Scene::Scene() :
         mPrevTime(0.0),
         mMovementType(Scene::MoveType::MOVE_FIXED),
         mCameraType(Scene::CameraType::CAMERA_ARC),
+        mTimeSpeed(1.f),
         mStars(10)
 {
         // Initialize openGL stuff
@@ -69,6 +70,8 @@ void Scene::keyPressEvent(int key, int scancode, int action, int mods)
                         case GLFW_KEY_SPACE: mPaused = !mPaused; break;
                         case GLFW_KEY_S: stepScene(0.05); break;
                         case GLFW_KEY_W: mStars.resetGeometry(); break;
+                        case GLFW_KEY_E: mTimeSpeed *= 10; break;
+                        case GLFW_KEY_Q: mTimeSpeed /= 10; break;
                 }
         }
 }
@@ -89,6 +92,7 @@ void Scene::updateScene(double time)
         mTime.currentTime = static_cast<float>(time);
         if (!mPaused)
         {
+                mTime.deltaTime *= static_cast<float>(mTimeSpeed);
                 mStars.updateGeometry(mTime);
         }
 }

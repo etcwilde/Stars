@@ -30,16 +30,15 @@ class StarField : public atlas::utils::Geometry
 
                 void resetGeometry() override;
 
-
         private:
                 GLuint mVao;
                 GLuint mVbo;
 
                 struct Star
                 {
-                        glm::vec3 _pos;     // pos
-                        glm::vec3 _vel;     // velocity
-                        glm::vec4 _color;   // rgba
+                        glm::vec3 _pos;   // Position
+                        glm::vec3 _vel;   // Velocity
+                        glm::vec4 _color; // rgba color
                         float _mass;
                         float _radius;
                 };
