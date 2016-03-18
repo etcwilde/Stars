@@ -10,20 +10,10 @@ StarField::StarField(size_t count)
 
         // Start working with one star
 
-        mStars.push_back({glm::vec3(0, 0, 0), glm::vec3(0.55E-5, 0, 0), glm::vec4(1.f, 0.7f, 0.2f, 1.f), 1.89E30f, 4.f});
-        mStars.push_back({glm::vec3(0, 0, 5), glm::vec3(-0.55E-5, 0, 0), glm::vec4(1.f, 0.7f, 0.3f, 1.f), 1.8E30f, 4.f});
-        mStars.push_back({glm::vec3(0, 1, -20), glm::vec3(5.5E-3, 0, 0), glm::vec4(0.f, 0.4f, 0.3f, 1.f), 5.9736E24f, 1.f});
-        mStars.push_back({glm::vec3(0, 1.2, -16), glm::vec3(4.8E-2, 0, 0), glm::vec4(0.8f, 0.7f, 0.7f, 1.f), 7.34E22f, 0.5f});
-        mStars.push_back({glm::vec3(22, 1.2, -6.5), glm::vec3(0.1E-2, 0, 0.1E-2), glm::vec4(0.8f, 0.7f, 0.7f, 1.f), 7.34E27f, 1.7f});
-        mStars.push_back({glm::vec3(10, 1.2, -10), glm::vec3(4.8E-2, 0, 0), glm::vec4(0.8f, 0.7f, 0.7f, 1.f), 7.34E22f, 0.5f});
-        mStars.push_back({glm::vec3(0, 1.6, -16), glm::vec3(4.8E-2, 0, 0), glm::vec4(0.8f, 0.7f, 0.7f, 1.f), 7.34E22f, 0.5f});
-        mStars.push_back({glm::vec3(15, 10, 0), glm::vec3(0, 0, 3.E-2), glm::vec4(1.f, 0.8f, 0.2f, 1.f), 0.25E24f, 2.f});
-        mStars.push_back({glm::vec3(15, 20, 0), glm::vec3(0, 0, 1.E-2), glm::vec4(0.8f, 0.6f, 0.4f, 1.f), 1.E25f, 2.5f});
-        mStars.push_back({glm::vec3(15, 29, 0), glm::vec3(0, 0, 2.E-2), glm::vec4(0.8f, 0.9f, 0.4f, 1.f), 5.E24f, 2.5f});
-        mStars.push_back({glm::vec3(15, -10, 5), glm::vec3(0, 0, 5.E-2), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.1E24f, 2.5f});
-        mStars.push_back({glm::vec3(15, -14, 5), glm::vec3(0, 0, 3.E-2), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.2E25f, 2.5f});
-        mStars.push_back({glm::vec3(15, -14, -5), glm::vec3(0.5E-3, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.2E22f, 1.2f});
-        mStars.push_back({glm::vec3(15, 14, -5), glm::vec3(0.5E-3, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 0.2E22f, 1.2f});
+        mStars.push_back({glm::vec3(0, 0, 0), glm::vec3(0, 0, 2.8), glm::vec4(1.f, 0.7f, 0.2f, 1.f), 3.89f, 4.f});
+        mStars.push_back({glm::vec3(4, 1, 0), glm::vec3(0, 0, -2.8), glm::vec4(1.f, 0.7f, 0.2f, 1.f), 3.89f, 4.f});
+        mStars.push_back({glm::vec3(8, 0, 0), glm::vec3(0, 0, -5.8), glm::vec4(1.f, 0.5f, 0.4f, 1.f), 0.59f, 1.f});
+        mStars.push_back({glm::vec3(-4, -1, 0), glm::vec3(0, 0, 5.8), glm::vec4(0.2f, 0.3f, 0.7f, 1.f), 0.59f, 1.f});
 
 
         //resetGeometry();
@@ -149,7 +139,7 @@ void StarField::stepGeometry(atlas::utils::Time const&t)
 
 void StarField::updateGeometry(atlas::utils::Time const&t)
 {
-        physics::ODERK4 solver;
+        physics::ODERK3 solver;
         glm::vec3 pos, vel;
 
         for (auto star = mStars.begin(); star != mStars.end(); star++)
@@ -165,7 +155,7 @@ void StarField::updateGeometry(atlas::utils::Time const&t)
                                 if (distance == 0) continue;
                                 A += (star->_pos - other->_pos) * (-other->_mass / (distance * distance));
                         }
-                        return A * 6.67E-11f / static_cast<float>(mStars.size()-1);
+                        return A * 6.67f / static_cast<float>(mStars.size() - 1);
                 };
                 solver.evaluate([=](auto t, auto y) { return accelFunc(t) / star->_mass;},
                                 t.currentTime, star->_pos, star->_vel,
