@@ -2,14 +2,18 @@
 #define __STAR_STAR_HPP
 
 #include <atlas/utils/Geometry.hpp>
+#include <atlas/core/Log.hpp>
 
 #include <vector>
 #include <iterator>
+#include <random>
 
 #include "ShaderPaths.hpp"
 #include "math.hpp"
 
 #define UNIVERSE_SEED   42
+
+#define MASS_SCALE      0.025f
 
 // There was never a star to begin with
 
