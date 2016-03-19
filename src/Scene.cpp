@@ -10,7 +10,7 @@ Scene::Scene() :
         mMovementType(Scene::MoveType::MOVE_FIXED),
         mCameraType(Scene::CameraType::CAMERA_ARC),
         mTimeSpeed(1.f),
-        mStars(10)
+        mStars(450)
 {
         // Initialize openGL stuff
         glDepthFunc(GL_LEQUAL);

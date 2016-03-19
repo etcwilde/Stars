@@ -4,8 +4,6 @@
 uniform mat4 MVP;
 
 float Ns = 250;
-vec4 mat_spec = vec4(1);
-vec4 light_spec = vec4(1);
 
 out vec4 vFragColor;
 
@@ -16,6 +14,7 @@ in vec4 flightDir;
 
 void main()
 {
+        if (fmassRad.x <= 0) discard;
         vec3 N;
         N.xy = gl_PointCoord * 2.0 - vec2(1.0);
         float mag = dot(N.xy, N.xy);
@@ -27,5 +26,4 @@ void main()
 
         float diffuse = max(0.0, dot(vec3(0.0, 0.0, 1.0), N));
         vFragColor = fcolor * diffuse + S;
-        //vFragColor = fcolor * diffuse + S;
 }

@@ -1,19 +1,58 @@
 #include "Star.hpp"
 
 
-// TODO: Implement with count -- Get working for now
+#include <set>
+
 StarField::StarField(size_t count)
 {
         USING_ATLAS_GL_NS;
 
         // Generate Geometry
 
-        // Start working with one star
 
+        std::set<struct Star, bool(*)(struct StarField::Star, struct StarField::Star)> starInit([](struct StarField::Star a, struct StarField::Star b) { return (a._pos.x + a._pos.y + a._pos.z) > (b._pos.x +
+                                b._pos.y + b._pos.z); });
+
+
+        std::mt19937 g(UNIVERSE_SEED);
+        std::normal_distribution<float> pd(-30.0, 30.0);
+        std::normal_distribution<float> vd(-6.f, 6.f);
+        std::normal_distribution<float> md(5.f, 25.f);
+
+        for(unsigned int i = 0; i < count; ++i)
+        {
+                float mass = md(g);
+                starInit.insert({glm::vec3(pd(g), pd(g), pd(g)),
+                                glm::vec3(vd(g), vd(g), vd(g)) / mass,
+                                glm::vec4(1.f, 1.f, 1.f, 1.f),
+                                mass, mass * MASS_SCALE});
+        }
+        USING_ATLAS_CORE_NS;
+        mStars.push_back({glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec4(0, 0, 0, 0.2f), 3450.f, 2.f});
+        for (struct Star s: starInit) mStars.push_back(s);
+
+        Log::log(Log::SeverityLevel::DEBUG, "Star Init: " + std::to_string(starInit.size()) +
+                        ", Star Final: " + std::to_string(mStars.size()) );
+
+        /*
+        for (struct Star s: mStars) {
+                Log::log(Log::SeverityLevel::DEBUG, "Star Pos: [" +
+                                std::to_string(s._pos.x) + ", " +
+                                std::to_string(s._pos.y) + ", " +
+                                std::to_string(s._pos.z) + "]");
+        } */
+
+
+        //mStars = std::vector<struct Star>();
+
+        /*
         mStars.push_back({glm::vec3(0, 0, 0), glm::vec3(0, 0, 2.8), glm::vec4(1.f, 0.7f, 0.2f, 1.f), 3.89f, 4.f});
         mStars.push_back({glm::vec3(4, 1, 0), glm::vec3(0, 0, -2.8), glm::vec4(1.f, 0.7f, 0.2f, 1.f), 3.89f, 4.f});
         mStars.push_back({glm::vec3(8, 0, 0), glm::vec3(0, 0, -5.8), glm::vec4(1.f, 0.5f, 0.4f, 1.f), 0.59f, 1.f});
         mStars.push_back({glm::vec3(-4, -1, 0), glm::vec3(0, 0, 5.8), glm::vec4(0.2f, 0.3f, 0.7f, 1.f), 0.59f, 1.f});
+        */
+
+
 
 
         //resetGeometry();
@@ -84,20 +123,7 @@ void StarField::renderGeometry(atlas::math::Matrix4 p, atlas::math::Matrix4 v)
         mShaders[0]->disableShaders();
 }
 
-void StarField::resetGeometry()
-{
-        /*
-        mStars.push_back({glm::vec3(-10, 0, 0), glm::vec3(0, 0, 0), glm::vec4(1.f, 0.8f, 0.3f, 1.f), 0.5f, 0.5f});
-        mStars.push_back({glm::vec3(0, 10, 0), glm::vec3(0.5, 0, 0), glm::vec4(1.f, 0.2f, 0.0f, 1.f), 1.f, 4.f});
-        mStars.push_back({glm::vec3(-15, 10, 0), glm::vec3(0, 0, 0), glm::vec4(1.f, 0.8f, 0.2f, 1.f), 2.f, 2.f});
-        mStars.push_back({glm::vec3(15, 20, 0), glm::vec3(0, 0, 0), glm::vec4(0.8f, 0.6f, 0.4f, 1.f), 1.f, 4.f});
-        mStars.push_back({glm::vec3(15, 29, 0), glm::vec3(0, 0, 0), glm::vec4(0.8f, 0.9f, 0.4f, 1.f), 1.f, 4.f});
-        mStars.push_back({glm::vec3(15, 10, 5), glm::vec3(0, 0, 0), glm::vec4(0.1f, 0.9f, 0.4f, 1.f), 1.f, 4.f});
-        mStars.push_back({glm::vec3(-5, -10, 5), glm::vec3(0, 0, 0), glm::vec4(0.8f, 0.9f, 0.0f, 1.f), 1.f, 4.f});
-
-        */
-
-}
+void StarField::resetGeometry() { }
 
 void StarField::stepGeometry(atlas::utils::Time const&t)
 {
@@ -144,7 +170,7 @@ void StarField::updateGeometry(atlas::utils::Time const&t)
 
         for (auto star = mStars.begin(); star != mStars.end(); star++)
         {
-                //if (star == mStars.begin()) continue;
+                if (star == mStars.begin()) continue;
                 auto accelFunc = [=](auto t)
                 {
                         glm::vec3 A;
